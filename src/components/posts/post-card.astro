@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { ArrowRight } from "lucide-vue-next";
+import { Badge } from "$components/ui/badge";
+import { fade } from "astro:transitions";
+
+interface Props {
+	post: CollectionEntry<"posts">;
+}
+
+const {
+	post: {
+		slug,
+		data: { title, description, tags, published },
+	},
+} = Astro.props;
+
+const formatter = new Intl.DateTimeFormat("en", {
+	year: "numeric",
+	month: "long",
+	day: "numeric",
+	timeZone: "utc",
+});
+---
+
+<a
+	href={`/posts/${slug}`}
+	class="group block rounded-md border-[1px] border-border bg-card p-3 shadow transition-colors hover:bg-muted/50"
+>
+	<div class="flex flex-row justify-between">
+		<section>
+			<p class="text-md font-semibold">
+				{title}
+			</p>
+			<p class="text-xs text-muted-foreground">{formatter.format(published)}</p>
+		</section>
+		<section class="self-center" role="none">
+			<ArrowRight
+				class="h-[1.2rem] w-[1.2rem] -translate-x-2 stroke-[2] opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100"
+			/>
+			<div class="sr-only">View post</div>
+		</section>
+	</div>
+</a>

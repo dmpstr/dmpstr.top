@@ -1,0 +1,34 @@
+---
+import RootLayout from "$layouts/root.astro";
+import PostCard from "$components/posts/post-card.astro";
+import type { GetStaticPaths, Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+import { getAllPosts, sortByDate } from "$lib/util/posts";
+
+interface Props {
+	page: Page<CollectionEntry<"posts">>;
+	uniqueTags: string[];
+}
+
+export const getStaticPaths = (async ({ paginate }) => {
+	const postsUnsorted = await getAllPosts();
+	const posts = sortByDate(postsUnsorted);
+
+	return paginate(posts, {
+		pageSize: 10,
+	});
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+---
+
+<RootLayout
+	title="Blog"
+	description="A collection of blog posts about everything Android + personal stuff"
+>
+	<h2 class="mb-3 text-2xl font-semibold">Latest posts</h2>
+
+	<div class="flex flex-col gap-2">
+		{page.data.map((post) => <PostCard post={post} />)}
+	</div>
+</RootLayout>

@@ -1,0 +1,77 @@
+---
+import type { CollectionEntry } from "astro:content";
+import RootLayout from "./root.astro";
+import { cn } from "$lib/util/tailwind";
+import { fade } from "astro:transitions";
+import { Button } from "$components/ui/button";
+
+interface Props {
+	post: CollectionEntry<"posts">;
+}
+
+const formatter = new Intl.DateTimeFormat("en", {
+	year: "numeric",
+	month: "long",
+	day: "numeric",
+	timeZone: "utc",
+});
+
+const { post } = Astro.props;
+const {
+	data: { title, description, published, tags },
+	slug,
+} = post;
+---
+
+<RootLayout
+	title={title}
+	description={description}
+	openGraph={{
+		basic: {
+			title,
+			type: "article",
+			url: `https://dmpstr.top/posts/${slug}`,
+			image: "",
+		},
+		article: {
+			authors: ["dmpstr"],
+			tags,
+		},
+		optional: {
+			description,
+		},
+	}}
+>
+	<Button asChild variant="link" class:list={["mb-1 px-0"]}>
+		<a href="/posts">← Back to posts</a>
+	</Button>
+	<!-- <p class="mb-1 text-sm font-medium text-muted-foreground">Published on {formatter.format(published)}</p> -->
+	<h1 class="mb-2 text-3xl font-bold">
+		{title}
+	</h1>
+	<div class="mb-3 flex items-center justify-between gap-2">
+		<div>
+			<p class="mb-1 text-sm font-medium text-muted-foreground">Published on {formatter.format(published)}</p>
+		</div>
+		<div>
+			{
+				tags.map((tag, index) => (
+					<>
+						<a
+							class="text-sm font-medium text-secondary-foreground  hover:underline hover:underline-offset-[3px]"
+							href={`/posts/tags/${tag}`}
+						>
+							# {tag}
+						</a>
+					</>
+				))
+			}
+		</div>
+	</div>
+	<div class="mb-4 flex items-center justify-start">
+		<div class="w-full border-b-2 border-border"></div>
+	</div>
+	<article class="prose dark:prose-invert">
+		<slot />
+	</article>
+</RootLayout>

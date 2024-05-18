@@ -1,0 +1,15 @@
+{
+	"style": "new-york",
+	"typescript": true,
+	"tailwind": {
+		"config": "tailwind.config.mjs",
+		"css": "src/styles/tailwind.css",
+		"baseColor": "zinc",
+		"cssVariables": true
+	},
+	"framework": "astro",
+	"aliases": {
+		"components": "$components",
+		"utils": "$lib/util/tailwind"
+	}
+}

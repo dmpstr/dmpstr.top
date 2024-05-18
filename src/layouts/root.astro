@@ -1,0 +1,91 @@
+---
+import "$styles/tailwind.css";
+import "$styles/global.css";
+import "$styles/keyframes.css";
+import Header from "$components/sections/header.astro";
+import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
+import { ViewTransitions } from "astro:transitions";
+import { SEO, type Props as SeoProps } from "astro-seo";
+
+type Props = SeoProps;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<!-- basic meta -->
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<!-- fonts -->
+		<GoogleFontsOptimizer
+			url="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+		/>
+		<!-- view transitions -->
+		<ViewTransitions fallback="none" />
+		<!-- seo -->
+		<link rel="sitemap" href="/sitemap-index.xml" />
+		<SEO
+			{...Astro.props}
+			title="dmpstr.top - dmpstr"
+			description="dmpstr's site"
+			openGraph={{
+				basic: { title: "dmpstr", type: "website", url: "https://dmpstr.top", image: "" },
+				optional: {
+					description: "ich bin aubrey",
+					siteName: "dmpstr.top",
+				},
+			}}
+			twitter={{
+				card: "summary",
+				site: "@0x3a33",
+				creator: "@0x3a33",
+			}}
+		/>
+		<!-- color scheme script -->
+		<script is:inline>
+			const theme = (() => {
+				if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+					return localStorage.getItem("theme");
+				}
+				if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+					return "dark";
+				}
+				return "light";
+			})();
+
+			if (theme === "light") {
+				document.documentElement.classList.remove("dark");
+				document.documentElement.classList.add("light");
+			} else {
+				document.documentElement.classList.add("dark");
+				document.documentElement.classList.remove("light");
+			}
+
+			window.localStorage.setItem("theme", theme);
+
+			document.addEventListener("astro:after-swap", () => {
+				if (localStorage.getItem("theme") === "dark") {
+					document.documentElement.classList.add("dark");
+					document.documentElement.classList.remove("light");
+				} else {
+					document.documentElement.classList.remove("dark");
+					document.documentElement.classList.add("light");
+				}
+			});
+		</script>
+	</head>
+	<body class="min-h-screen bg-background font-sans antialiased">
+		<div class="flex min-h-screen flex-col py-8">
+			<Header />
+			<main class="flex-1">
+				<div class="container lg:max-w-[640px]">
+					<div class="pt-6">
+						<slot />
+					</div>
+				</div>
+			</main>
+		</div>
+	</body>
+</html>

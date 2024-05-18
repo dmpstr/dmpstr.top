@@ -1,0 +1,43 @@
+---
+import { Card, CardDescription, CardHeader, CardTitle } from "$components/ui/card";
+import { projects } from "$lib/projects";
+import { ArrowRight } from "lucide-vue-next";
+import RootLayout from "../layouts/root.astro";
+import { getAllPosts, sortByDate } from "$lib/util/posts";
+import PostCard from "$components/posts/post-card.astro";
+
+const posts = sortByDate(await getAllPosts()).slice(0, 3);
+---
+
+<RootLayout>
+	<p class="text-sm text-muted-foreground">dmpstr (they/them)</p>
+	<p class="pt-3">
+          Android Modder based in the Philippines
+	</p>
+	<h3 class="pt-7 text-xl font-semibold">Featured Projects</h3>
+	<div class="grid flex-1 grid-cols-2 gap-2 pt-3">
+		{
+			projects.map((project) => (
+				<Card
+					as="a"
+					href={project.url}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="group rounded-lg transition-colors hover:bg-muted/50"
+				>
+					<CardHeader class="p-4">
+						<CardTitle client:load class="flex items-center gap-1 font-semibold tracking-normal">
+							{project.name}{" "}
+							<ArrowRight class="h-[1.2rem] w-[1.2rem] stroke-[2] transition-transform group-hover:translate-x-1 " />
+						</CardTitle>
+						<CardDescription class="mt-2">{project.description}</CardDescription>
+					</CardHeader>
+				</Card>
+			))
+		}
+	</div>
+	<h3 class="pt-7 text-xl font-semibold">Recent Posts</h3>
+	<div class="grid flex-1 grid-cols-2 gap-2 pt-3">
+		{posts.map((post) => <PostCard post={post} />)}
+	</div>
+</RootLayout>

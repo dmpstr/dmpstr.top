@@ -1,0 +1,54 @@
+---
+import { Image } from "astro:assets";
+import ThemeToggle from "$components/theme-toggle.vue";
+import { Button } from "$components/ui/button";
+import { LINKS } from "$lib/config";
+import LinksMenu from "../links-menu.vue";
+import { GithubLogoIcon } from "@radix-icons/vue";
+---
+
+<header class="container lg:max-w-[640px]">
+	<div class="flex items-center justify-between py-4 pb-3">
+		<div class="flex items-center space-x-2">
+			<Image
+				format="jpeg"
+				width={50}
+				height={50}
+				src="/profile-pic.jpeg"
+				alt="profile picture"
+				class="mr-2 h-10 w-10 rounded-full sm:h-12 sm:w-12"
+			/>
+			<div class="flex flex-col space-y-1 text-sm leading-none">
+				<a class="text-lg font-bold" href="/">dmpstr</a>
+				<div class="hidden space-x-2 sm:block">
+					{
+						LINKS.map((link) => (
+							<a
+								class="text-sm text-foreground/60 transition-colors hover:text-foreground/80 "
+								href={link.link}
+							>
+								/{link.name}
+							</a>
+						))
+					}
+				</div>
+			</div>
+		</div>
+		<div class="flex items-center gap-2">
+			<!-- @ts-ignore -->
+			<Button
+				variant="ghost"
+				class="h-9 w-9 px-0 !ring-0"
+				as="a"
+				rel="noopener noreferrer"
+				target="_blank"
+				href="https://github.com/dmpstr"
+			>
+				<GithubLogoIcon class="h-[1.2rem] w-[1.2rem]" />
+				<span class="sr-only">Toggle theme</span>
+			</Button>
+			<ThemeToggle client:load />
+			<LinksMenu client:load />
+		</div>
+	</div>
+</header>

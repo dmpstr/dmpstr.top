@@ -1,0 +1,27 @@
+@keyframes slide-to-bottom {
+	to {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+}
+
+@keyframes slide-from-top {
+	from {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+}
+
+@keyframes slide-to-top {
+	to {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+}
+
+@keyframes slide-from-bottom {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+}
